@@ -31,7 +31,7 @@
 ```
 视频世界原子操作（16个）
 │
-├── 1. Navigate API（导航类）- 2个
+├── 1. Video API（视频数据类）- 2个
 │   ├── get_video_info         // 获取视频元信息
 │   └── get_temporal_structure // 获取时间结构
 │
@@ -62,9 +62,9 @@
 
 ## 三、原子操作详细规范
 
-### 3.1 Navigate API（导航类）
+### 3.1 Video API（视频数据类）
 
-导航类API帮助LLM理解视频的宏观结构和基本属性，是探索视频的起点。
+视频数据类API提供视频的原始数据和结构信息，包括元数据和时间结构，是LLM访问视频的基础。
 
 ---
 
@@ -1222,7 +1222,7 @@ LLM在推理过程中：
 
 **是否所有操作都必要？**
 
-- **Navigate API (2个)**：必要，是视频探索的起点
+- **Video API (2个)**：必要，提供视频的基础数据和结构
 - **Perception API (6个)**：必要，提供不同粒度和模态的感知
   - `describe_visual`：自然语言描述，灵活
   - `detect_objects`：结构化对象信息
@@ -1250,7 +1250,7 @@ LLM在推理过程中：
 
 **5个类别的逻辑**：
 
-1. **Navigate**: "我需要了解视频的整体情况"
+1. **Video**: "我需要获取视频的原始数据和结构"
 2. **Perception**: "我需要观察视频的内容"
 3. **Entity Trace**: "我需要跟踪特定对象"
 4. **Retrieval**: "我需要在视频中找到相关内容"
@@ -1260,11 +1260,12 @@ LLM在推理过程中：
 
 ### 5.2 粒度权衡
 
-**Navigate API为何只有2个？**
+**Video API为何只有2个？**
 
-- `get_video_info`：最基础的元信息
-- `get_temporal_structure`：时间结构
-- 更细粒度的导航通过`temporal_search`（Retrieval）实现
+- `get_video_info`：最基础的元数据（raw metadata）
+- `get_temporal_structure`：时间结构数据（raw temporal structure）
+- 这两个API专注于提供视频的原始数据，不涉及语义理解
+- 更高层的语义检索通过`temporal_search`（Retrieval）实现
 
 **Perception API为何有6个？**
 
@@ -1535,7 +1536,7 @@ with ThreadPoolExecutor() as executor:
 
 | 分类 | API名称 | 核心功能 |
 |-----|---------|---------|
-| **Navigate** | get_video_info | 获取视频元信息 |
+| **Video** | get_video_info | 获取视频元信息 |
 | | get_temporal_structure | 获取场景切分 |
 | **Perception** | describe_visual | 生成视觉描述 |
 | | detect_objects | 对象检测 |
